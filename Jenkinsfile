@@ -95,8 +95,7 @@ pipeline {
                         credentialsId: 'dockerhub-creds',
                         usernameVariable: 'DOCKERHUB_USERNAME',
                         passwordVariable: 'DOCKERHUB_PASSWORD'
-                    ])
-                {
+                    ]) {
                     sh '''
                         set +x
 
