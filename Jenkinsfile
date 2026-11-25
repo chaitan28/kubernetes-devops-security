@@ -87,31 +87,32 @@ pipeline {
                 }
             }
         }
-
         stage('Docker Push to Docker Hub') {
-            steps {
+             steps {
                 withCredentials([
-                    usernamePassword(
+                   usernamePassword(
                         credentialsId: 'dockerhub-creds',
                         usernameVariable: 'DOCKERHUB_USERNAME',
                         passwordVariable: 'DOCKERHUB_PASSWORD'
-                    ]) {
-                    sh '''
-                        set +x
+            )
+        ]) {
+            sh '''
+                set +x
 
-                        echo "$DOCKERHUB_PASSWORD" | docker login \
-                            --username "$DOCKERHUB_USERNAME" \
-                            --password-stdin
+                echo "$DOCKERHUB_PASSWORD" | docker login \
+                --username "$DOCKERHUB_USERNAME" \
+                --password-stdin
 
-                        trap 'docker logout >/dev/null 2>&1 || true' EXIT
+                trap 'docker logout >/dev/null 2>&1 || true' EXIT
 
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${BUILD_NUMBER}
+                docker push ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${BUILD_NUMBER}
 
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:latest
-                    '''
-                }
-            }
+                docker push ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:latest
+            '''
         }
+    }
+}
+        
     }
 
     post {
